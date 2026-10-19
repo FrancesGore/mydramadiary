@@ -1608,7 +1608,13 @@
     updateStats();
   </script>
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register(
+        '/mydramadiary/sw.js'
+      ).catch(error => {
+        console.error('Errore Service Worker:', error);
+      });
+    });
   }
 </script>
 </body>
