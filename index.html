@@ -1607,15 +1607,15 @@
     renderMyList();
     updateStats();
   </script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register(
-        '/mydramadiary/sw.js'
-      ).catch(error => {
-        console.error('Errore Service Worker:', error);
+ <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/mydramadiary/sw.js')
+          .catch(error => {
+            console.error('Errore Service Worker:', error);
+          });
       });
-    });
-  }
-</script>
+    }
+  </script>
 </body>
 </html>
