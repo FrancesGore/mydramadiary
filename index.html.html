@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyDramaDiary - Il tuo diario di Drama Asiatici</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 50%, #e1bee7 100%);
+      --card-bg: rgba(255, 255, 255, 0.92);
+      --primary-purple: #7a42b0;
+      --primary-hover: #633293;
+      --lilac-soft: #d8b4e2;
+      --fuchsia-bright: #e91e63;
+      --fuchsia-light: #f48fb1;
+      --pink-soft: #ffcdd2;
+      --text-dark: #3c244d;
+      --text-muted: #7e638b;
+      --border-color: #f0d5e8;
+      --shadow-soft: 0 10px 25px rgba(122, 66, 176, 0.12);
+      --radius-lg: 20px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* SCHERMATA ATTIVAZIONE LICENZA */
+    .activation-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-gradient);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+
+    .activation-card {
+      background: white;
+      padding: 32px 24px;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 20px 40px rgba(122, 66, 176, 0.2);
+      text-align: center;
+      max-width: 420px;
+      width: 100%;
+      border: 2px solid var(--border-color);
+    }
+
+    /* CONTENITORE LOGO SVG */
+    .logo-svg-container {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 16px auto;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 6px 16px rgba(122, 66, 176, 0.25);
+    }
+
+    .logo-svg-container svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .header-logo-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(122, 66, 176, 0.25);
+    }
+
+    .header-logo-box svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .activation-card h2 {
+      font-family: 'Fredoka', cursive;
+      color: var(--primary-purple);
+      margin-bottom: 8px;
+      font-size: 1.6rem;
+    }
+
+    .activation-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+
+    .activation-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-size: 1.05rem;
+      text-align: center;
+      font-family: 'Fredoka', cursive;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      outline: none;
+      margin-bottom: 16px;
+    }
+
+    .activation-input:focus {
+      border-color: var(--primary-purple);
+    }
+
+    .activation-error {
+      color: #e91e63;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-top: 8px;
+      display: none;
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 2px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .brand-title {
+      font-family: 'Fredoka', cursive;
+      font-size: 1.6rem;
+      background: linear-gradient(45deg, var(--primary-purple), var(--fuchsia-bright));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .btn {
+      font-family: 'Fredoka', cursive;
+      padding: 10px 18px;
+      border-radius: 30px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--fuchsia-bright), var(--primary-purple));
+      color: white;
+      box-shadow: 0 4px 12px rgba(233, 30, 99, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(233, 30, 99, 0.4);
+    }
+
+    .btn-mdl {
+      background: #3f51b5;
+      color: white;
+      font-size: 0.75rem;
+      padding: 5px 10px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: background 0.2s;
+    }
+
+    .btn-mdl:hover {
+      background: #303f9f;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 20px;
+      flex: 1;
+      width: 100%;
+    }
+
+    .tabs-nav {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 10px;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      border: none;
+      background: transparent;
+      font-family: 'Fredoka', cursive;
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-radius: 20px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .tab-btn.active {
+      background: white;
+      color: var(--primary-purple);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .view-panel {
+      display: none;
+    }
+
+    .view-panel.active {
+      display: block;
+    }
+
+    .filter-section {
+      background: white;
+      padding: 16px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border-color);
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .filter-group-title {
+      font-family: 'Fredoka', cursive;
+      font-size: 0.9rem;
+      color: var(--primary-purple);
+      margin-bottom: 4px;
+    }
+
+    .status-filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-chip {
+      padding: 6px 14px;
+      background: rgba(243, 229, 245, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .filter-chip.active {
+      background: var(--primary-purple);
+      color: white;
+      border-color: var(--primary-purple);
+    }
+
+    .search-box-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      background: white;
+      padding: 8px 12px;
+      border-radius: 40px;
+      box-shadow: var(--shadow-soft);
+      border: 2px solid var(--border-color);
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .search-type-select {
+      border: none;
+      background: #f3e5f5;
+      color: var(--primary-purple);
+      font-family: 'Fredoka', cursive;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .search-box-bar input {
+      flex: 1;
+      min-width: 200px;
+      border: none;
+      padding: 10px 14px;
+      font-size: 1rem;
+      outline: none;
+      font-family: 'Quicksand', sans-serif;
+      border-radius: 30px;
+    }
+
+    .drama-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .drama-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .drama-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 15px 30px rgba(122, 66, 176, 0.2);
+    }
+
+    .poster-wrapper {
+      position: relative;
+      padding-top: 140%;
+      background: var(--lilac-soft);
+      overflow: hidden;
+    }
+
+    .poster-wrapper img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .status-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: white;
+      backdrop-filter: blur(6px);
+      text-transform: uppercase;
+    }
+
+    .country-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: rgba(255,255,255,0.92);
+      color: var(--primary-purple);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    .status-watching { background: rgba(122, 66, 176, 0.85); }
+    .status-completed { background: rgba(76, 175, 80, 0.85); }
+    .status-plan { background: rgba(233, 30, 99, 0.85); }
+    .status-paused { background: rgba(255, 152, 0, 0.85); }
+    .status-dropped { background: rgba(158, 158, 158, 0.85); }
+
+    .card-info {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .drama-title {
+      font-family: 'Fredoka', cursive;
+      font-size: 1.05rem;
+      margin-bottom: 4px;
+      color: var(--text-dark);
+      line-height: 1.2;
+    }
+
+    .drama-genre-tag {
+      font-size: 0.75rem;
+      color: var(--fuchsia-bright);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .ratings-row {
+      display: flex;
+      gap: 10px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .mdl-score { color: #e67e22; }
+    .user-score { color: var(--fuchsia-bright); }
+
+    .drama-cast-info {
+      font-size: 0.75rem;
+      color: var(--primary-purple);
+      font-weight: 600;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .actor-link {
+      color: var(--primary-purple);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .actor-link:hover {
+      color: var(--fuchsia-bright);
+      text-decoration: underline;
+    }
+
+    .avoid-warning {
+      background: #ffebee;
+      color: #c62828;
+      border: 1px solid #ef9a9a;
+      padding: 6px 8px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .progress-bar-container {
+      background: #f0e6f2;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--fuchsia-light), var(--primary-purple));
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .card-links {
+      margin-bottom: 10px;
+    }
+
+    .card-actions {
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border-color);
+      gap: 4px;
+    }
+
+    .ep-counter {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary-purple);
+    }
+
+    .quick-add-btn {
+      padding: 4px 8px;
+      border-radius: 12px;
+      border: 1px solid var(--lilac-soft);
+      background: white;
+      color: var(--primary-purple);
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .quick-add-btn:hover {
+      background: var(--primary-purple);
+      color: white;
+    }
+
+    .delete-drama-btn {
+      padding: 4px 8px;
+      border-radius: 12px;
+      border: 1px solid #ef9a9a;
+      background: #ffebee;
+      color: #c62828;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .delete-drama-btn:hover {
+      background: #c62828;
+      color: white;
+    }
+
+    .actors-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media(max-width: 768px) {
+      .actors-container { grid-template-columns: 1fr; }
+    }
+
+    .actor-box {
+      background: white;
+      padding: 20px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border-color);
+    }
+
+    .actor-box h3 {
+      font-family: 'Fredoka', cursive;
+      margin-bottom: 14px;
+      color: var(--primary-purple);
+      font-size: 1.2rem;
+    }
+
+    .actor-input-group {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .actor-input-group input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-md);
+      outline: none;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    .actor-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .actor-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fcf5fc;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .delete-actor-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--fuchsia-bright);
+      font-weight: bold;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(60, 36, 77, 0.5);
+      backdrop-filter: blur(4px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      max-width: 500px;
+      width: 100%;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #f0e6f2;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-weight: bold;
+      color: var(--text-dark);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+      color: var(--text-dark);
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-md);
+      outline: none;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: var(--radius-lg);
+      text-align: center;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border-color);
+    }
+
+    .stat-number {
+      font-family: 'Fredoka', cursive;
+      font-size: 2.5rem;
+      color: var(--fuchsia-bright);
+    }
+
+    .stat-label {
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--primary-purple);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      display: none;
+      z-index: 2000;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SCHERMATA ATTIVAZIONE LICENZA -->
+  <div class="activation-overlay" id="activation-overlay">
+    <div class="activation-card">
+      
+      <!-- LOGO ILLUSTRATIVO VETTORIALE GRANDE -->
+      <div class="logo-svg-container">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 1024" role="img" aria-label="Ciak cinematografico con gesto del cuore">
+          <rect width="1536" height="1024" fill="#C4A8F8"/>
+          <rect x="92" y="123" width="1352" height="770" rx="52" fill="#A284E4"/>
+          <path d="M300,600 C290,520 350,460 430,470 C440,380 500,290 600,272 C700,262 800,290 880,330 C950,360 1000,450 1080,495 C1150,520 1235,570 1230,650 C1225,760 1120,825 1000,825 L500,770 C380,770 300,700 300,600 Z" fill="#9070D8"/>
+          <path d="M430,208 C436,236 444,248 474,258 C444,268 436,280 430,308 C424,280 416,268 384,258 C416,248 424,236 430,208 Z" fill="#CDB8F5"/>
+          <path d="M1178,426 C1181,446 1186,452 1204,456 C1186,460 1181,466 1178,486 C1175,466 1170,460 1152,456 C1170,452 1175,446 1178,426 Z" fill="#CDB8F5"/>
+          <path d="M347,614 C320,596 315,575 330,572 C340,570 347,576 347,576 C347,576 356,562 368,566 C378,570 374,590 347,614 Z" fill="#C9B3F3"/>
+          <path d="M1161,715 C1134,697 1130,676 1145,672 C1155,670 1161,676 1161,676 C1161,676 1170,662 1182,666 C1192,670 1188,690 1161,715 Z" fill="#C9B3F3"/>
+          <g stroke-linejoin="round" stroke-linecap="round">
+            <path d="M432,556 L830,470 L848,545 L790,735 L505,790 Q488,792 484,776 Z" fill="#45405E" stroke="#2A1F3D" stroke-width="10"/>
+            <g stroke="#B1A9CC" stroke-width="14" fill="none">
+              <path d="M492,606 L758,548"/>
+              <path d="M507,661 L770,605"/>
+              <path d="M520,719 L662,688"/>
+            </g>
+            <path d="M440,444 L808,398 Q818,398 820,408 L832,462 L525,528 Q512,530 508,518 Z" fill="#45405E" stroke="#2A1F3D" stroke-width="10"/>
+            <g fill="#E0DAF0">
+              <path d="M552,462 L608,448 L580,516 L527,526 Z"/>
+              <path d="M653,440 L718,424 L690,498 L638,504 Z"/>
+              <path d="M770,410 L816,404 L826,456 L752,474 Z"/>
+            </g>
+            <path d="M388,438 L762,262 Q772,258 777,268 L797,320 Q799,328 790,333 L490,464 Z" fill="#45405E" stroke="#2A1F3D" stroke-width="10"/>
+            <g fill="#E0DAF0">
+              <path d="M410,436 L460,412 L508,442 L486,458 Z"/>
+              <path d="M514,388 L580,358 L635,394 L580,420 Z"/>
+              <path d="M622,338 L690,310 L745,345 L682,374 Z"/>
+              <path d="M714,296 L763,274 L785,320 L750,330 Z"/>
+            </g>
+            <path d="M412,452 Q420,436 440,444 L500,480 Q518,490 514,512 Q512,526 498,530 L436,552 Q422,554 418,540 Z" fill="#45405E" stroke="#2A1F3D" stroke-width="10"/>
+            <circle cx="434" cy="473" r="10" fill="#E0DAF0" stroke="none"/>
+            <circle cx="488" cy="511" r="9" fill="#2A1F3D" stroke="none"/>
+            <g stroke="#FF8DC8" stroke-width="13" fill="none">
+              <path d="M852,168 L900,208"/>
+              <path d="M826,268 L889,262"/>
+              <path d="M1119,257 L1182,239"/>
+              <path d="M1106,312 L1159,341"/>
+            </g>
+            <path d="M985,347 C950,310 922,275 925,235 C928,195 970,182 995,205 C1000,212 1005,218 1010,215 C1030,200 1075,200 1090,235 C1100,270 1060,310 985,347 Z" fill="#FF3F94" stroke="#2A1F3D" stroke-width="10"/>
+            <path d="M950,236 C952,220 962,210 972,208" stroke="#FFB0D6" stroke-width="12" fill="none"/>
+            <path d="M898,458 C880,420 872,380 888,355 C905,335 940,345 962,385 L978,425 Z" fill="#FDCDD8" stroke="#3A1535" stroke-width="9"/>
+            <path d="M826,684 C805,620 805,570 830,520 C860,480 960,400 1015,362 C1050,345 1085,365 1070,400 C1055,430 1020,470 1000,490 C1030,485 1050,510 1038,540 C1070,530 1090,560 1078,585 C1105,600 1105,640 1085,675 C1065,720 1030,750 1000,768 C930,770 860,730 826,684 Z" fill="#FDCDD8" stroke="#3A1535" stroke-width="9"/>
+            <g stroke="#3A1535" stroke-width="8" fill="none">
+              <path d="M903,570 C930,540 960,510 1000,488"/>
+              <path d="M965,613 C990,585 1020,555 1038,535"/>
+              <path d="M1022,657 C1045,625 1065,600 1076,583"/>
+            </g>
+            <ellipse cx="1040" cy="392" rx="36" ry="20" transform="rotate(-40 1040 392)" fill="#FFE3EA" stroke="#F2A5BC" stroke-width="5"/>
+            <path d="M826,684 C795,710 760,735 745,755 C740,775 800,830 880,855 C920,868 960,868 975,862 C990,850 1005,815 1018,780 C1020,768 1010,765 1000,768 C930,770 860,730 826,684 Z" fill="#FF86B8" stroke="#3A1535" stroke-width="9"/>
+            <g stroke="#EE6AA2" stroke-width="7" fill="none">
+              <path d="M785,755 C795,742 805,735 815,728"/>
+              <path d="M912,822 C925,800 935,785 940,772"/>
+              <path d="M950,835 C962,815 972,798 978,785"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <h2>MyDramaDiary</h2>
+      <p>Benvenuta! Inserisci la tua <strong>Chiave di Licenza</strong> per sbloccare l'applicazione.</p>
+      
+      <input type="text" class="activation-input" id="license-key-input" placeholder="MDD-XXXX-XXXX" maxlength="25">
+      <button class="btn btn-primary" id="activate-btn" style="width:100%; justify-content:center; padding: 12px;" onclick="validateKey()">Attiva Licenza ✨</button>
+      
+      <div class="activation-error" id="activation-error">Codice non valido o già utilizzato.</div>
+    </div>
+  </div>
+
+  <header>
+    <div class="header-container">
+      <div class="brand-logo-area" onclick="switchTab('my-list')">
+        
+        <!-- LOGO ILLUSTRATIVO VETTORIALE PICCOLO (HEADER) -->
+        <div class="header-logo-box">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 1024" role="img" aria-label="Logo MyDramaDiary">
+            <rect width="1536" height="1024" fill="#C4A8F8"/>
+            <rect x="92" y="123" width="1352" height="770" rx="52" fill="#A284E4"/>
+            <path d="M300,600 C290,520 350,460 430,470 C440,380 500,290 600,272 C700,262 800,290 880,330 C950,360 1000,450 1080,495 C1150,520 1235,570 1230,650 C1225,760 1120,825 1000,825 L500,770 C380,770 300,700 300,600 Z" fill="#9070D8"/>
+            <g stroke-linejoin="round" stroke-linecap="round">
+              <path d="M432,556 L830,470 L848,545 L790,735 L505,790 Q488,792 484,776 Z" fill="#45405E" stroke="#2A1F3D" stroke-width="10"/>
+              <path d="M440,444 L808,398 Q818,398 820,408 L832,462 L525,528 Q512,530 508,518 Z" fill="#45405E" stroke="#2A1F3D" stroke-width="10"/>
+              <path d="M388,438 L762,262 Q772,258 777,268 L797,320 Q799,328 790,333 L490,464 Z" fill="#45405E" stroke="#2A1F3D" stroke-width="10"/>
+              <path d="M985,347 C950,310 922,275 925,235 C928,195 970,182 995,205 C1000,212 1005,218 1010,215 C1030,200 1075,200 1090,235 C1100,270 1060,310 985,347 Z" fill="#FF3F94" stroke="#2A1F3D" stroke-width="10"/>
+              <path d="M826,684 C805,620 805,570 830,520 C860,480 960,400 1015,362 C1050,345 1085,365 1070,400 C1055,430 1020,470 1000,490 C1030,485 1050,510 1038,540 C1070,530 1090,560 1078,585 C1105,600 1105,640 1085,675 C1065,720 1030,750 1000,768 C930,770 860,730 826,684 Z" fill="#FDCDD8" stroke="#3A1535" stroke-width="9"/>
+              <path d="M826,684 C795,710 760,735 745,755 C740,775 800,830 880,855 C920,868 960,868 975,862 C990,850 1005,815 1018,780 C1020,768 1010,765 1000,768 C930,770 860,730 826,684 Z" fill="#FF86B8" stroke="#3A1535" stroke-width="9"/>
+            </g>
+          </svg>
+        </div>
+
+        <span class="brand-title">MyDramaDiary</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <nav class="tabs-nav">
+      <button class="tab-btn active" id="btn-tab-my-list" onclick="switchTab('my-list')">📖 Il Mio Diario</button>
+      <button class="tab-btn" id="btn-tab-search" onclick="switchTab('search')">🔍 Cerca Drama (MDL)</button>
+      <button class="tab-btn" id="btn-tab-actors" onclick="switchTab('actors')">👥 Attori & Cast</button>
+      <button class="tab-btn" id="btn-tab-stats" onclick="switchTab('stats')">📊 Statistiche</button>
+    </nav>
+
+    <!-- SCHEDA DIARIO CON FILTRI COMPLETI -->
+    <section id="tab-my-list" class="view-panel active">
+      <div class="filter-section">
+        <div>
+          <div class="filter-group-title">📌 Per Stato</div>
+          <div class="status-filters">
+            <button class="filter-chip filter-status active" onclick="setFilter('status', 'all', this)">Tutti</button>
+            <button class="filter-chip filter-status" onclick="setFilter('status', 'In visione', this)">In Visione</button>
+            <button class="filter-chip filter-status" onclick="setFilter('status', 'Completato', this)">Completati</button>
+            <button class="filter-chip filter-status" onclick="setFilter('status', 'Da vedere', this)">Da Vedere</button>
+            <button class="filter-chip filter-status" onclick="setFilter('status', 'In pausa', this)">In Pausa</button>
+            <button class="filter-chip filter-status" onclick="setFilter('status', 'Abbandonato', this)">Abbandonati</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="filter-group-title">🌏 Per Nazionalità</div>
+          <div class="status-filters">
+            <button class="filter-chip filter-country active" onclick="setFilter('country', 'all', this)">Tutte</button>
+            <button class="filter-chip filter-country" onclick="setFilter('country', 'K-Drama', this)">🇰🇷 K-Drama</button>
+            <button class="filter-chip filter-country" onclick="setFilter('country', 'C-Drama', this)">🇨🇳 C-Drama</button>
+            <button class="filter-chip filter-country" onclick="setFilter('country', 'J-Drama', this)">🇯🇵 J-Drama</button>
+            <button class="filter-chip filter-country" onclick="setFilter('country', 'T-Drama', this)">🇹🇼 T-Drama</button>
+            <button class="filter-chip filter-country" onclick="setFilter('country', 'Thai-Drama', this)">🇹🇭 Thai</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="filter-group-title">🎭 Per Genere</div>
+          <div class="status-filters">
+            <button class="filter-chip filter-genre active" onclick="setFilter('genre', 'all', this)">Tutti i generi</button>
+            <button class="filter-chip filter-genre" onclick="setFilter('genre', 'Romantico', this)">💖 Romantico</button>
+            <button class="filter-chip filter-genre" onclick="setFilter('genre', 'Commedia', this)">😂 Commedia</button>
+            <button class="filter-chip filter-genre" onclick="setFilter('genre', 'Scolastico', this)">🏫 Scolastico</button>
+            <button class="filter-chip filter-genre" onclick="setFilter('genre', 'Office Romance', this)">💼 Office Romance</button>
+            <button class="filter-chip filter-genre" onclick="setFilter('genre', 'Slice of Life', this)">☕ Slice of Life</button>
+            <button class="filter-chip filter-genre" onclick="setFilter('genre', 'BL / GL', this)">🌈 BL / GL</button>
+            <button class="filter-chip filter-genre" onclick="setFilter('genre', 'Viaggi nel tempo', this)">⏳ Viaggi nel tempo</button>
+            <button class="filter-chip filter-genre" onclick="setFilter('genre', 'Costume / Epoca', this)">👘 Costume / Epoca</button>
+            <button class="filter-chip filter-genre" onclick="setFilter('genre', 'Thriller / Mistero', this)">🔍 Thriller / Mistero</button>
+            <button class="filter-chip filter-genre" onclick="setFilter('genre', 'Vendetta', this)">⚖️ Vendetta</button>
+            <button class="filter-chip filter-genre" onclick="setFilter('genre', 'Crime', this)">🕵️ Crime</button>
+            <button class="filter-chip filter-genre" onclick="setFilter('genre', 'Fantasy', this)">✨ Fantasy</button>
+            <button class="filter-chip filter-genre" onclick="setFilter('genre', 'Drammatico', this)">🎭 Drammatico</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="drama-grid" id="user-drama-grid"></div>
+    </section>
+
+    <!-- SCHEDA RICERCA -->
+    <section id="tab-search" class="view-panel">
+      <div class="search-box-bar">
+        <select id="search-type" class="search-type-select" onchange="updateSearchPlaceholder()">
+          <option value="title">🎬 Cerca per Titolo</option>
+          <option value="actor">👤 Cerca per Attore/Attrice</option>
+        </select>
+        <input type="text" id="search-input" placeholder="Cerca un drama (es. Goblin, Business Proposal)..." onkeypress="handleSearchKey(event)">
+        <button class="btn btn-primary" onclick="searchDramaOnline()">Cerca</button>
+      </div>
+      <div class="drama-grid" id="search-results-grid"></div>
+    </section>
+
+    <!-- SCHEDA ATTORI & PREFERENZE -->
+    <section id="tab-actors" class="view-panel">
+      <div class="actors-container">
+        <div class="actor-box">
+          <h3>💖 Attori & Attrici Preferiti</h3>
+          <div class="actor-input-group">
+            <input type="text" id="fav-actor-input" placeholder="Nome attore/attrice...">
+            <button class="btn btn-primary" style="font-size:0.85rem; padding: 8px 14px;" onclick="addActor('favorites')">Aggiungi</button>
+          </div>
+          <ul class="actor-list" id="favorites-actor-list"></ul>
+        </div>
+        <div class="actor-box">
+          <h3>🚫 Attori & Attrici da Evitare</h3>
+          <div class="actor-input-group">
+            <input type="text" id="avoid-actor-input" placeholder="Nome attore/attrice...">
+            <button class="btn btn-primary" style="font-size:0.85rem; padding: 8px 14px;" onclick="addActor('avoid')">Aggiungi</button>
+          </div>
+          <ul class="actor-list" id="avoid-actor-list"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCHEDA STATISTICHE -->
+    <section id="tab-stats" class="view-panel">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number" id="stat-total">0</div>
+          <div class="stat-label">Drama Inseriti</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="stat-completed">0</div>
+          <div class="stat-label">Completati</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="stat-episodes">0</div>
+          <div class="stat-label">Episodi Visti</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="stat-rating">0.0</div>
+          <div class="stat-label">Voto Medio Personale</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODALE MODIFICA -->
+  <div class="modal-backdrop" id="drama-modal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <h3 style="font-family:'Fredoka'; margin-bottom:16px; color:var(--primary-purple)" id="modal-title">Modifica Drama</h3>
+      
+      <form id="drama-form" onsubmit="saveDramaForm(event)">
+        <input type="hidden" id="form-id">
+        <div class="form-group">
+          <label>Titolo Drama</label>
+          <input type="text" id="form-title" required>
+        </div>
+        <div class="form-group">
+          <label>URL Locandina/Immagine</label>
+          <input type="url" id="form-poster" placeholder="https://...">
+        </div>
+        <div class="form-group" style="display:flex; gap:10px;">
+          <div style="flex:1">
+            <label>Nazionalità</label>
+            <select id="form-country">
+              <option value="K-Drama">🇰🇷 K-Drama (Corea)</option>
+              <option value="C-Drama">🇨🇳 C-Drama (Cina)</option>
+              <option value="J-Drama">🇯🇵 J-Drama (Giappone)</option>
+              <option value="T-Drama">🇹🇼 T-Drama (Taiwan)</option>
+              <option value="Thai-Drama">🇹🇭 Thai Drama</option>
+              <option value="Altro">🌏 Altro</option>
+            </select>
+          </div>
+          <div style="flex:1">
+            <label>Genere Principale</label>
+            <select id="form-genre">
+              <option value="Romantico">💖 Romantico</option>
+              <option value="Commedia">😂 Commedia</option>
+              <option value="Scolastico">🏫 Scolastico</option>
+              <option value="Office Romance">💼 Office Romance</option>
+              <option value="Slice of Life">☕ Slice of Life</option>
+              <option value="BL / GL">🌈 BL / GL</option>
+              <option value="Viaggi nel tempo">⏳ Viaggi nel tempo</option>
+              <option value="Costume / Epoca">👘 Costume / Epoca</option>
+              <option value="Thriller / Mistero">🔍 Thriller / Mistero</option>
+              <option value="Vendetta">⚖️ Vendetta</option>
+              <option value="Crime">🕵️ Crime</option>
+              <option value="Fantasy">✨ Fantasy</option>
+              <option value="Drammatico">🎭 Drammatico</option>
+              <option value="Azione">💥 Azione</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Cast Principale / Attori (Main Roles)</label>
+          <input type="text" id="form-cast" placeholder="es. Hyun Bin, Son Ye-jin, Seo Ji-hye">
+        </div>
+        <div class="form-group" style="display:flex; gap:10px;">
+          <div style="flex:1">
+            <label>Stato</label>
+            <select id="form-status">
+              <option value="Da vedere">Da vedere</option>
+              <option value="In visione">In visione</option>
+              <option value="Completato">Completato</option>
+              <option value="In pausa">In pausa</option>
+              <option value="Abbandonato">Abbandonato</option>
+            </select>
+          </div>
+          <div style="flex:1">
+            <label>Il Tuo Voto Cuoricini (1-10)</label>
+            <input type="number" id="form-rating" min="1" max="10" step="0.5" placeholder="Senza voto">
+          </div>
+        </div>
+        <div class="form-group" style="display:flex; gap:10px;">
+          <div style="flex:1">
+            <label>Episodi Visti</label>
+            <input type="number" id="form-watched-ep" min="0" value="0">
+          </div>
+          <div style="flex:1">
+            <label>Episodi Totali</label>
+            <input type="number" id="form-total-ep" min="1" value="16">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Trama (MyDramaList in Italiano)</label>
+          <textarea id="form-synopsis" rows="3" placeholder="Trama ufficiale del drama..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Le Mie Note & Recensione Personale</label>
+          <textarea id="form-notes" rows="3" placeholder="Scrivi qui i tuoi pensieri sul drama..."></textarea>
+        </div>
+        
+        <div style="margin-bottom: 16px;">
+          <a id="modal-mdl-link" href="#" target="_blank" class="btn-mdl" style="font-size:0.85rem; padding: 8px 14px;">
+            🔗 Leggi scheda su MyDramaList
+          </a>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">Salva Modifiche</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast-msg">Operazione completata!</div>
+
+  <script>
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwUpqIyJ_nqG2KAF2N_rnR-hOGWXS7XG637LQXhjr40S3jGqImOtfFuv4LtIIG18qKK/exec"; 
+    const MASTER_KEY = "MDD-VIP-PASS-2026";
+
+    function checkLicenseOnStart() {
+      const isActivated = localStorage.getItem('mdd_activated');
+      if (isActivated === 'true') {
+        document.getElementById('activation-overlay').style.display = 'none';
+      }
+    }
+
+    async function validateKey() {
+      const inputVal = document.getElementById('license-key-input').value.trim().toUpperCase();
+      const errorMsg = document.getElementById('activation-error');
+      const btn = document.getElementById('activate-btn');
+
+      if (!inputVal) return;
+
+      if (inputVal === MASTER_KEY) {
+        unlockApp();
+        return;
+      }
+
+      btn.innerText = "Verifica in corso...";
+      errorMsg.style.display = 'none';
+
+      try {
+        const checkRes = await fetch(`${GOOGLE_SCRIPT_URL}?action=check&key=${encodeURIComponent(inputVal)}`);
+        const checkData = await checkRes.json();
+
+        if (checkData.status === "VALID") {
+          await fetch(`${GOOGLE_SCRIPT_URL}?action=use&key=${encodeURIComponent(inputVal)}`);
+          unlockApp();
+        } else if (checkData.status === "ALREADY_USED") {
+          errorMsg.innerText = "⚠️ Questa chiave è già stata utilizzata su un altro dispositivo!";
+          errorMsg.style.display = 'block';
+          btn.innerText = "Attiva Licenza ✨";
+        } else {
+          errorMsg.innerText = "❌ Codice di licenza non valido o inesistente nel foglio.";
+          errorMsg.style.display = 'block';
+          btn.innerText = "Attiva Licenza ✨";
+        }
+      } catch (err) {
+        errorMsg.innerText = "Errore di connessione. Controlla internet.";
+        errorMsg.style.display = 'block';
+        btn.innerText = "Attiva Licenza ✨";
+      }
+    }
+
+    function unlockApp() {
+      localStorage.setItem('mdd_activated', 'true');
+      document.getElementById('activation-overlay').style.display = 'none';
+      showToast('Licenza attivata con successo! Benvenuta! ✨');
+    }
+
+    let myDramas = JSON.parse(localStorage.getItem('my_drama_diary') || '[]');
+    let favoriteActors = JSON.parse(localStorage.getItem('my_fav_actors') || '[]');
+    let avoidActors = JSON.parse(localStorage.getItem('my_avoid_actors') || '[]');
+    
+    let currentStatusFilter = 'all';
+    let currentCountryFilter = 'all';
+    let currentGenreFilter = 'all';
+
+    function setFilter(type, value, btnElement) {
+      if (type === 'status') {
+        currentStatusFilter = value;
+        document.querySelectorAll('.filter-status').forEach(b => b.classList.remove('active'));
+      } else if (type === 'country') {
+        currentCountryFilter = value;
+        document.querySelectorAll('.filter-country').forEach(b => b.classList.remove('active'));
+      } else if (type === 'genre') {
+        currentGenreFilter = value;
+        document.querySelectorAll('.filter-genre').forEach(b => b.classList.remove('active'));
+      }
+      btnElement.classList.add('active');
+      renderMyList();
+    }
+
+    function getMDLLink(title) {
+      return `https://mydramalist.com/search?q=${encodeURIComponent(title)}`;
+    }
+
+    function getActorLink(actorName) {
+      return `https://mydramalist.com/search?q=${encodeURIComponent(actorName.trim())}`;
+    }
+
+    function formatCastHTML(castString) {
+      if (!castString) return '';
+      const actors = castString.split(',');
+      return actors.map(actor => {
+        const name = actor.trim();
+        if (!name) return '';
+        return `<a href="${getActorLink(name)}" target="_blank" class="actor-link">${name}</a>`;
+      }).filter(Boolean).join(', ');
+    }
+
+    async function translateToItalian(text) {
+      if (!text || text.trim() === '') return '';
+      try {
+        const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=it&dt=t&q=${encodeURIComponent(text)}`);
+        const data = await res.json();
+        if (data && data[0]) {
+          return data[0].map(s => s[0]).join('');
+        }
+      } catch (e) {
+        console.error("Traduzione fallita", e);
+      }
+      return text;
+    }
+
+    function detectCountry(show) {
+      try {
+        let code = '';
+        if (show.network && show.network.country && show.network.country.code) {
+          code = show.network.country.code.toUpperCase();
+        } else if (show.webChannel && show.webChannel.country && show.webChannel.country.code) {
+          code = show.webChannel.country.code.toUpperCase();
+        }
+        const lang = (show.language || '').toLowerCase();
+
+        if (code === 'KR' || lang === 'korean') return 'K-Drama';
+        if (code === 'CN' || code === 'HK' || lang === 'chinese') return 'C-Drama';
+        if (code === 'JP' || lang === 'japanese') return 'J-Drama';
+        if (code === 'TW') return 'T-Drama';
+        if (code === 'TH' || lang === 'thai') return 'Thai-Drama';
+      } catch (e) {}
+      return 'K-Drama';
+    }
+
+    function detectGenre(genresArray) {
+      if (!genresArray || genresArray.length === 0) return 'Romantico';
+      const gList = genresArray.map(g => g.toLowerCase());
+
+      if (gList.includes('romance')) return 'Romantico';
+      if (gList.includes('comedy')) return 'Commedia';
+      if (gList.includes('school')) return 'Scolastico';
+      if (gList.includes('thriller') || gList.includes('mystery')) return 'Thriller / Mistero';
+      if (gList.includes('history') || gList.includes('historical')) return 'Costume / Epoca';
+      if (gList.includes('fantasy') || gList.includes('supernatural')) return 'Fantasy';
+      if (gList.includes('crime')) return 'Crime';
+      if (gList.includes('action')) return 'Azione';
+      if (gList.includes('drama')) return 'Drammatico';
+      return 'Romantico';
+    }
+
+    function saveToStorage() {
+      localStorage.setItem('my_drama_diary', JSON.stringify(myDramas));
+      localStorage.setItem('my_fav_actors', JSON.stringify(favoriteActors));
+      localStorage.setItem('my_avoid_actors', JSON.stringify(avoidActors));
+      renderMyList();
+      renderActorsLists();
+      updateStats();
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.view-panel').forEach(panel => panel.classList.remove('active'));
+      
+      const btnTarget = document.getElementById('btn-tab-' + tabId);
+      if (btnTarget) btnTarget.classList.add('active');
+      
+      const tabTarget = document.getElementById('tab-' + tabId);
+      if (tabTarget) tabTarget.classList.add('active');
+
+      if (tabId === 'actors') renderActorsLists();
+    }
+
+    function checkAvoidedActors(castString) {
+      if (!castString) return [];
+      const castArray = castString.split(',').map(c => c.trim().toLowerCase());
+      return avoidActors.filter(avoid => 
+        castArray.some(actor => actor.includes(avoid.toLowerCase()))
+      );
+    }
+
+    function renderMyList() {
+      const grid = document.getElementById('user-drama-grid');
+      grid.innerHTML = '';
+
+      const filtered = myDramas.filter(d => {
+        const matchStatus = (currentStatusFilter === 'all' || d.status === currentStatusFilter);
+        const matchCountry = (currentCountryFilter === 'all' || d.country === currentCountryFilter);
+        const matchGenre = (currentGenreFilter === 'all' || d.genre === currentGenreFilter);
+        return matchStatus && matchCountry && matchGenre;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:var(--text-muted); padding: 40px;">Nessun drama trovato con i filtri selezionati.</p>`;
+        return;
+      }
+
+      filtered.forEach(drama => {
+        const pct = Math.min(100, Math.round((drama.watchedEp / (drama.totalEp || 1)) * 100));
+        const mdlUrl = getMDLLink(drama.title);
+        const card = document.createElement('div');
+        card.className = 'drama-card';
+
+        const userScoreText = drama.rating ? `💖 ${drama.rating}/10` : '💖 -/10';
+        const mdlScoreText = drama.mdlRating ? `⭐ ${drama.mdlRating}` : '⭐ 8.5';
+        
+        const avoidedFound = checkAvoidedActors(drama.cast);
+        let warningHtml = '';
+        if (avoidedFound.length > 0) {
+          warningHtml = `<div class="avoid-warning">⚠️ Attenzione: C'è ${avoidedFound.join(', ')} (da evitare)!</div>`;
+        }
+
+        const castFormatted = formatCastHTML(drama.cast);
+
+        card.innerHTML = `
+          <div class="poster-wrapper">
+            <img src="${drama.poster || 'https://via.placeholder.com/300x400?text=No+Cover'}" alt="${drama.title}">
+            <span class="status-badge status-${getStatusClass(drama.status)}">${drama.status}</span>
+            <span class="country-badge">${drama.country || 'K-Drama'}</span>
+          </div>
+          <div class="card-info">
+            <div class="drama-title">${drama.title}</div>
+            <div class="drama-genre-tag">${drama.genre ? '🏷️ ' + drama.genre : ''}</div>
+            
+            <div class="ratings-row">
+              <span class="mdl-score">${mdlScoreText}</span>
+              <span class="user-score">${userScoreText}</span>
+            </div>
+
+            ${warningHtml}
+            ${castFormatted ? `<div class="drama-cast-info">👥 Cast: ${castFormatted}</div>` : ''}
+            
+            <div class="progress-bar-container">
+              <div class="progress-fill" style="width: ${pct}%"></div>
+            </div>
+            
+            <div class="card-links">
+              <a href="${mdlUrl}" target="_blank" class="btn-mdl">
+                🔗 Scheda MyDramaList
+              </a>
+            </div>
+
+            <div class="card-actions">
+              <span class="ep-counter">${drama.watchedEp} / ${drama.totalEp || '?'} Ep</span>
+              <div>
+                <button class="quick-add-btn" onclick="incEp('${drama.id}')">+1 Ep</button>
+                <button class="quick-add-btn" onclick="editDrama('${drama.id}')">✏️</button>
+                <button class="delete-drama-btn" onclick="deleteDrama('${drama.id}')">🗑️</button>
+              </div>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function renderActorsLists() {
+      const favList = document.getElementById('favorites-actor-list');
+      const avoidList = document.getElementById('avoid-actor-list');
+      
+      favList.innerHTML = favoriteActors.length ? '' : '<li style="font-size:0.85rem; color:var(--text-muted); text-align:center;">Nessun attore preferito aggiunto.</li>';
+      avoidList.innerHTML = avoidActors.length ? '' : '<li style="font-size:0.85rem; color:var(--text-muted); text-align:center;">Nessun attore da evitare aggiunto.</li>';
+
+      favoriteActors.forEach((actor, index) => {
+        favList.innerHTML += `<li class="actor-item"><span>💖 <a href="${getActorLink(actor)}" target="_blank" class="actor-link">${actor}</a></span><button class="delete-actor-btn" onclick="removeActor('favorites', ${index})">✕</button></li>`;
+      });
+
+      avoidActors.forEach((actor, index) => {
+        avoidList.innerHTML += `<li class="actor-item"><span>🚫 <a href="${getActorLink(actor)}" target="_blank" class="actor-link">${actor}</a></span><button class="delete-actor-btn" onclick="removeActor('avoid', ${index})">✕</button></li>`;
+      });
+    }
+
+    function addActor(type) {
+      if (type === 'favorites') {
+        const input = document.getElementById('fav-actor-input');
+        const val = input.value.trim();
+        if (val && !favoriteActors.includes(val)) {
+          favoriteActors.push(val);
+          input.value = '';
+          saveToStorage();
+          showToast(`"${val}" aggiunto ai preferiti!`);
+        }
+      } else {
+        const input = document.getElementById('avoid-actor-input');
+        const val = input.value.trim();
+        if (val && !avoidActors.includes(val)) {
+          avoidActors.push(val);
+          input.value = '';
+          saveToStorage();
+          showToast(`"${val}" aggiunto alla lista da evitare!`);
+        }
+      }
+    }
+
+    function removeActor(type, index) {
+      if (type === 'favorites') {
+        favoriteActors.splice(index, 1);
+      } else {
+        avoidActors.splice(index, 1);
+      }
+      saveToStorage();
+    }
+
+    function getStatusClass(status) {
+      switch(status) {
+        case 'In visione': return 'watching';
+        case 'Completato': return 'completed';
+        case 'Da vedere': return 'plan';
+        case 'In pausa': return 'paused';
+        default: return 'dropped';
+      }
+    }
+
+    function incEp(id) {
+      const drama = myDramas.find(d => d.id === id);
+      if (drama && drama.watchedEp < drama.totalEp) {
+        drama.watchedEp++;
+        if (drama.watchedEp >= drama.totalEp) {
+          drama.status = 'Completato';
+        } else if (drama.status === 'Da vedere') {
+          drama.status = 'In visione';
+        }
+        saveToStorage();
+        showToast(`Aggiornato a ${drama.watchedEp} episodi!`);
+      }
+    }
+
+    function deleteDrama(id) {
+      if (confirm("Sei sicura di voler rimuovere questo drama dal tuo diario?")) {
+        myDramas = myDramas.filter(d => d.id !== id);
+        saveToStorage();
+        showToast("Drama rimosso dal diario.");
+      }
+    }
+
+    function editDrama(id) {
+      const drama = myDramas.find(d => d.id === id);
+      if (!drama) return;
+
+      document.getElementById('modal-title').innerText = 'Modifica Drama';
+      document.getElementById('form-id').value = drama.id;
+      document.getElementById('form-title').value = drama.title;
+      document.getElementById('form-poster').value = drama.poster;
+      document.getElementById('form-country').value = drama.country || 'K-Drama';
+      document.getElementById('form-genre').value = drama.genre || 'Romantico';
+      document.getElementById('form-cast').value = drama.cast || '';
+      document.getElementById('form-status').value = drama.status;
+      document.getElementById('form-rating').value = drama.rating || '';
+      document.getElementById('form-watched-ep').value = drama.watchedEp;
+      document.getElementById('form-total-ep').value = drama.totalEp;
+      document.getElementById('form-synopsis').value = drama.synopsis || '';
+      document.getElementById('form-notes').value = drama.notes || '';
+
+      document.getElementById('modal-mdl-link').href = getMDLLink(drama.title);
+      document.getElementById('drama-modal').classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('drama-modal').classList.remove('open');
+    }
+
+    function saveDramaForm(e) {
+      e.preventDefault();
+      const id = document.getElementById('form-id').value;
+      const title = document.getElementById('form-title').value;
+      const poster = document.getElementById('form-poster').value;
+      const country = document.getElementById('form-country').value;
+      const genre = document.getElementById('form-genre').value;
+      const cast = document.getElementById('form-cast').value;
+      let status = document.getElementById('form-status').value;
+      const ratingVal = document.getElementById('form-rating').value;
+      const rating = ratingVal !== '' ? parseFloat(ratingVal) : null;
+      const watchedEp = parseInt(document.getElementById('form-watched-ep').value);
+      const totalEp = parseInt(document.getElementById('form-total-ep').value);
+      const synopsis = document.getElementById('form-synopsis').value;
+      const notes = document.getElementById('form-notes').value;
+
+      if (watchedEp >= totalEp && totalEp > 0) {
+        status = 'Completato';
+      } else if (watchedEp > 0 && status === 'Da vedere') {
+        status = 'In visione';
+      }
+
+      if (id) {
+        const drama = myDramas.find(d => d.id === id);
+        Object.assign(drama, { title, poster, country, genre, cast, status, rating, watchedEp, totalEp, synopsis, notes });
+      }
+
+      saveToStorage();
+      closeModal();
+      showToast('Modifiche salvate con successo!');
+    }
+
+    function updateSearchPlaceholder() {
+      const type = document.getElementById('search-type').value;
+      const input = document.getElementById('search-input');
+      if (type === 'actor') {
+        input.placeholder = "Cerca un attore/attrice (es. Song Joong-ki, IU, Lee Min-ho)...";
+      } else {
+        input.placeholder = "Cerca un drama (es. Goblin, Business Proposal)...";
+      }
+    }
+
+    async function searchDramaOnline() {
+      const query = document.getElementById('search-input').value.trim();
+      const type = document.getElementById('search-type').value;
+      if (!query) return;
+
+      const grid = document.getElementById('search-results-grid');
+      grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center;">Ricerca in corso per ${type === 'actor' ? 'attore' : 'titolo'} e traduzione trama...</p>`;
+
+      try {
+        let showsList = [];
+
+        if (type === 'actor') {
+          const personRes = await fetch(`https://api.tvmaze.com/search/people?q=${encodeURIComponent(query)}`);
+          const personData = await personRes.json();
+
+          if (personData.length === 0) {
+            grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center;">Nessun attore/attrice trovato con questo nome.</p>';
+            return;
+          }
+
+          const personId = personData[0].person.id;
+          const castCreditsRes = await fetch(`https://api.tvmaze.com/people/${personId}/castcredits?embed=show`);
+          const castCreditsData = await castCreditsRes.json();
+
+          showsList = castCreditsData.map(c => c._embedded.show).filter(Boolean);
+        } else {
+          const res = await fetch(`https://api.tvmaze.com/search/shows?q=${encodeURIComponent(query)}`);
+          const data = await res.json();
+          showsList = data.map(item => item.show);
+        }
+
+        grid.innerHTML = '';
+
+        if (showsList.length === 0) {
+          grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center;">Nessun drama trovato.</p>';
+          return;
+        }
+
+        const limit = Math.min(showsList.length, 12);
+        for (let i = 0; i < limit; i++) {
+          const show = showsList[i];
+          const showId = show.id;
+          
+          let episodesCount = 16;
+          try {
+            const epRes = await fetch(`https://api.tvmaze.com/shows/${showId}/episodes`);
+            const epData = await epRes.json();
+            if (epData && epData.length > 0) {
+              episodesCount = epData.length;
+            }
+          } catch(e) {}
+
+          let castNames = '';
+          try {
+            const castRes = await fetch(`https://api.tvmaze.com/shows/${showId}/cast`);
+            const castData = await castRes.json();
+            if (castData && castData.length > 0) {
+              castNames = castData.slice(0, 8).map(c => c.person.name).join(', ');
+            }
+          } catch(e) {}
+
+          const detectedCountry = detectCountry(show);
+          const detectedGenre = detectGenre(show.genres);
+
+          const rawSummary = show.summary ? show.summary.replace(/<[^>]*>?/gm, '') : '';
+          const translatedSynopsis = await translateToItalian(rawSummary);
+          const mdlRating = show.rating && show.rating.average ? show.rating.average.toFixed(1) : '8.5';
+          const mdlUrl = getMDLLink(show.name);
+
+          const avoidedFound = checkAvoidedActors(castNames);
+          let warningHtml = '';
+          if (avoidedFound.length > 0) {
+            warningHtml = `<div class="avoid-warning">⚠️ Attenzione: C'è ${avoidedFound.join(', ')} (da evitare)!</div>`;
+          }
+
+          const castFormatted = formatCastHTML(castNames);
+
+          const card = document.createElement('div');
+          card.className = 'drama-card';
+          card.innerHTML = `
+            <div class="poster-wrapper">
+              <img src="${show.image ? show.image.medium : 'https://via.placeholder.com/300x400?text=No+Cover'}" alt="${show.name}">
+              <span class="country-badge">${detectedCountry}</span>
+            </div>
+            <div class="card-info">
+              <div class="drama-title">${show.name}</div>
+              <div class="drama-genre-tag">🏷️ ${detectedGenre}</div>
+              <div class="ratings-row">
+                <span class="mdl-score">⭐ ${mdlRating}/10 (MDL)</span>
+              </div>
+              ${warningHtml}
+              <div class="drama-meta" style="font-size:0.8rem; margin-bottom:8px;">📺 ${episodesCount} Episodi Totali</div>
+              ${castFormatted ? `<div class="drama-cast-info">👥 Cast: ${castFormatted}</div>` : ''}
+              
+              <div class="card-links" style="margin-bottom:12px;">
+                <a href="${mdlUrl}" target="_blank" class="btn-mdl">
+                  🔗 Scheda MyDramaList
+                </a>
+              </div>
+              
+              <button class="btn btn-primary" style="margin-top:auto; font-size:0.8rem; width:100%; justify-content:center;" 
+                onclick="addDirectlyToDiary('${escapeHtml(show.name)}', '${show.image ? show.image.medium : ''}', ${episodesCount}, '${escapeHtml(castNames)}', '${escapeHtml(translatedSynopsis)}', '${mdlRating}', '${detectedCountry}', '${detectedGenre}')">
+                + Aggiungi al Diario
+              </button>
+            </div>
+          `;
+          grid.appendChild(card);
+        }
+      } catch (err) {
+        grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color:red;">Errore durante la ricerca.</p>';
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, ' ');
+    }
+
+    function addDirectlyToDiary(title, poster, totalEp, cast, synopsis, mdlRating, country, genre) {
+      myDramas.push({
+        id: Date.now().toString(),
+        title: title,
+        poster: poster,
+        country: country || 'K-Drama',
+        genre: genre || 'Romantico',
+        status: 'Da vedere',
+        rating: null,
+        mdlRating: mdlRating || '8.5',
+        watchedEp: 0,
+        totalEp: totalEp || 16,
+        cast: cast || '',
+        synopsis: synopsis || '',
+        notes: ''
+      });
+      saveToStorage();
+      showToast(`"${title}" aggiunto al tuo diario!`);
+      switchTab('my-list');
+    }
+
+    function handleSearchKey(e) {
+      if (e.key === 'Enter') searchDramaOnline();
+    }
+
+    function updateStats() {
+      document.getElementById('stat-total').innerText = myDramas.length;
+      document.getElementById('stat-completed').innerText = myDramas.filter(d => d.status === 'Completato').length;
+      document.getElementById('stat-episodes').innerText = myDramas.reduce((acc, d) => acc + d.watchedEp, 0);
+      
+      const ratedDramas = myDramas.filter(d => d.rating !== null && d.rating !== undefined);
+      const avg = ratedDramas.length ? (ratedDramas.reduce((acc, d) => acc + d.rating, 0) / ratedDramas.length).toFixed(1) : '0.0';
+      document.getElementById('stat-rating').innerText = avg;
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast-msg');
+      toast.innerText = msg;
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 2500);
+    }
+
+    document.getElementById('form-title').addEventListener('input', (e) => {
+      document.getElementById('modal-mdl-link').href = getMDLLink(e.target.value);
+    });
+
+    checkLicenseOnStart();
+    renderMyList();
+    updateStats();
+  </script>
+</body>
+</html>
