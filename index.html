@@ -1044,7 +1044,6 @@
 
   <script>
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwUpqIyJ_nqG2KAF2N_rnR-hOGWXS7XG637LQXhjr40S3jGqImOtfFuv4LtIIG18qKK/exec"; 
-    const MASTER_KEY = "MDD-VIP-PASS-2026";
 
     function checkLicenseOnStart() {
       const isActivated = localStorage.getItem('mdd_activated');
@@ -1054,42 +1053,37 @@
     }
 
     async function validateKey() {
-      const inputVal = document.getElementById('license-key-input').value.trim().toUpperCase();
-      const errorMsg = document.getElementById('activation-error');
-      const btn = document.getElementById('activate-btn');
+  const inputVal = document.getElementById('license-key-input').value.trim().toUpperCase();
+  const errorMsg = document.getElementById('activation-error');
+  const btn = document.getElementById('activate-btn');
 
-      if (!inputVal) return;
+  if (!inputVal) return;
 
-      if (inputVal === MASTER_KEY) {
-        unlockApp();
-        return;
-      }
+  btn.innerText = "Verifica in corso...";
+  errorMsg.style.display = 'none';
 
-      btn.innerText = "Verifica in corso...";
-      errorMsg.style.display = 'none';
+  try {
+    const checkRes = await fetch(`${GOOGLE_SCRIPT_URL}?action=check&key=${encodeURIComponent(inputVal)}`);
+    const checkData = await checkRes.json();
 
-      try {
-        const checkRes = await fetch(`${GOOGLE_SCRIPT_URL}?action=check&key=${encodeURIComponent(inputVal)}`);
-        const checkData = await checkRes.json();
-
-        if (checkData.status === "VALID") {
-          await fetch(`${GOOGLE_SCRIPT_URL}?action=use&key=${encodeURIComponent(inputVal)}`);
-          unlockApp();
-        } else if (checkData.status === "ALREADY_USED") {
-          errorMsg.innerText = "⚠️ Questa chiave è già stata utilizzata su un altro dispositivo!";
-          errorMsg.style.display = 'block';
-          btn.innerText = "Attiva Licenza ✨";
-        } else {
-          errorMsg.innerText = "❌ Codice di licenza non valido o inesistente nel foglio.";
-          errorMsg.style.display = 'block';
-          btn.innerText = "Attiva Licenza ✨";
-        }
-      } catch (err) {
-        errorMsg.innerText = "Errore di connessione. Controlla internet.";
-        errorMsg.style.display = 'block';
-        btn.innerText = "Attiva Licenza ✨";
-      }
+    if (checkData.status === "VALID") {
+      await fetch(`${GOOGLE_SCRIPT_URL}?action=use&key=${encodeURIComponent(inputVal)}`);
+      unlockApp();
+    } else if (checkData.status === "ALREADY_USED") {
+      errorMsg.innerText = "⚠️ Questa chiave è già stata utilizzata su un altro dispositivo!";
+      errorMsg.style.display = 'block';
+      btn.innerText = "Attiva Licenza ✨";
+    } else {
+      errorMsg.innerText = "❌ Codice di licenza non valido o inesistente nel foglio.";
+      errorMsg.style.display = 'block';
+      btn.innerText = "Attiva Licenza ✨";
     }
+  } catch (err) {
+    errorMsg.innerText = "Errore di connessione. Controlla internet.";
+    errorMsg.style.display = 'block';
+    btn.innerText = "Attiva Licenza ✨";
+  }
+}
 
     function unlockApp() {
       localStorage.setItem('mdd_activated', 'true');
